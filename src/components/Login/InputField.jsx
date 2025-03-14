@@ -1,8 +1,10 @@
+import './LoginComponents.css'
+
 const InputField = ({labelName, type, name, id, value, onChange, placeholder}) =>{
 
 return (
     <div className="content_input_field">
-        <lavel className="label_component_input">{labelName}</lavel>
+        <label for={name} className="label_component_input">{labelName}</label>
         <input 
             type={type} 
             name={name} 

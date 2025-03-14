@@ -8,7 +8,7 @@
     justify-content: center;
 }
 
-.login-container .division_login_image{
+.login-container .division_login_image {
     background-image: url('../../assets/images/background_login.svg');
     background-repeat: no-repeat;
     background-position: center;
@@ -26,15 +26,15 @@
     color: #FFFFFF;
     font-weight: 700;
     font-size: 60px;
-    margin-top: 250px;
+    margin-top: 300px;
     margin-bottom: 10px;
 }
 
-.division_login_image .login_text_title span{
+.division_login_image .login_text_title span {
     color: #FF5900;
 }
 
-.division_login_image .context_login{
+.division_login_image .context_login {
     color: #FFFFFF;
     font-size: 20px;
     width: 70%;
@@ -42,16 +42,83 @@
     text-align: center;
 }
 
+.title_message_login {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.description_message_login {
+    color: #A3A1A1;
+    margin-bottom: 10px;
+}
+
 .login-container .content_form_login {
-    background-color: brown;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #FEFBFB;
     width: 40%;
     height: 100%;
 }
 
-.content_form_login {
+.content_form_and_inputs {
+    width: 70%;
+}
+
+
+.remember-me input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 0.5px solid #C3BABA;
+    background-color: #FEFBFB;
+    border-radius: 5px;
+    appearance: none;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.remember-me input[type="checkbox"]:checked {
+    background-color: #007bff;
+    border: 0.5px solid #007bff;
+}
+
+.remember-me input[type="checkbox"]::before {
+    content: "✔";
+    font-size: 14px;
+    color: white;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 10%;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
+
+.remember-me input[type="checkbox"]:checked::before {
+    visibility: visible;
+}
+
+.label_text_remenber {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    color: #696666;
+    margin-left: 5px;
+}
+
+.button_login_form {
+    /* Rectangle 35 */
+
+    box-sizing: border-box;
+    background: #FF5900;
+    border: 0.5px solid #C3BABA;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+    width: 100%;
+    padding: 15px 0;
+    cursor: pointer;
 }

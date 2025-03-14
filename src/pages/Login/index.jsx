@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth';
 import { toast } from 'react-toastify';
 import './Login.css';
+import arrow_login_button from '../../assets/images/arrow_login_button.svg'
 
 import InputField from '../../components/Login/InputField';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,7 +20,12 @@ const Login = () => {
       const data = await login(email, password);
 
       if (data && data.access_token) {
-        sessionStorage.setItem('token', data.access_token);
+
+        if (rememberMe) {
+          localStorage.setItem("token", data.access_token);
+        } else {
+          sessionStorage.setItem("token", data.access_token);
+        }
 
         toast.success('Login realizado com sucesso! 🎉');
 
@@ -42,34 +49,50 @@ const Login = () => {
 
       <div className="content_form_login">
 
-        <div className="message_login_content">
-          <h1 className="title_message_login">Acesse o Proventus</h1>
-          <p className="description_message_login">Conecte-se à plataforma central e acesse todas as funcionalidades e gerencie seu negocio</p>
+        <div className="content_form_and_inputs">
+
+          <div className="message_login_content">
+            <h1 className="title_message_login">Acesse o Proventus</h1>
+            <p className="description_message_login">Conecte-se à plataforma central e acesse todas as funcionalidades e gerencie seu negocio</p>
+          </div>
+
+          <form className='login_form' onSubmit={handleSubmit}>
+            <InputField
+              labelName={"Email:"}
+              type="email"
+              name="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Digite seu email"
+            />
+
+            <InputField
+              labelName={"Senha:"}
+              type="password"
+              name="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Digite sua senha"
+            />
+
+            <div className="remember-me">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              <label className='label_text_remenber' htmlFor="rememberMe">Manter conectado</label>
+            </div>
+
+            <button className='button_login_form' type="submit">Acessar o Proventus <img src={arrow_login_button} /></button>
+
+          </form>
         </div>
 
-        <form className='login_form' onSubmit={handleSubmit}>
-          <InputField
-            labelName={"Email:"}
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Digite seu email"
-          />
 
-          <InputField
-            labelName={"Senha:"}
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Digite sua senha"
-          />
-
-          <button type="submit">Entrar</button>
-        </form>
       </div>
 
     </div>

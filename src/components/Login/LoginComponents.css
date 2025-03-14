@@ -1,0 +1,28 @@
+.content_input_field {
+    display: flex;
+    flex-direction: column;
+}
+
+.label_component_input{
+    font-weight: 600;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    color: #696666;
+}
+
+.content_input_field input{
+    border: 0.5px solid #C3BABA;
+    background-color: #FEFBFB;
+    border-radius: 5px;
+    padding: 15px 10px;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+
+.content_input_field input:focus{
+    outline: none;
+    box-shadow: none; 
+    border-color: #FF5900;
+
+}
