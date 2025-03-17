@@ -80,8 +80,8 @@
 }
 
 .remember-me input[type="checkbox"]:checked {
-    background-color: #007bff;
-    border: 0.5px solid #007bff;
+    background-color: #FF5900;
+    border: 0.5px solid #FF5900;
 }
 
 .remember-me input[type="checkbox"]::before {
