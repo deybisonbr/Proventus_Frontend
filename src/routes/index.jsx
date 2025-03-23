@@ -3,13 +3,14 @@ import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Dashboard from '../pages/Dashboard'; // Exemplo de dashboard
 import PrivateRoute from './PrivateRoute'; // Importando o PrivateRoute
+import Logout from '../pages/Logout';
 
 const AppRoutes = () => (
   <BrowserRouter>
     <Routes>
       {/* Rota pública */}
       <Route path="/" element={<Login />} />
-      
+
       {/* Rotas protegidas */}
       <Route
         path="/dashboard"
@@ -19,7 +20,7 @@ const AppRoutes = () => (
           </PrivateRoute>
         }
       />
-      
+
       <Route
         path="/profile"
         element={
@@ -28,6 +29,8 @@ const AppRoutes = () => (
           </PrivateRoute>
         }
       />
+
+      <Route path="/logout" element={<Logout />} />
     </Routes>
   </BrowserRouter>
 );

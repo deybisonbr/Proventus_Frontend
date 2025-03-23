@@ -1,10 +1,14 @@
 import React from 'react';
+import ContentMainComponents from '../../components/MainLayout/ContentMainComponents';
 
 const Profile = () => {
   return (
-    <div>
-      <h1>Profile Page</h1>
-    </div>
+    <React.Fragment>
+    <ContentMainComponents>
+        <h1>Profile</h1>
+    </ContentMainComponents>
+
+</React.Fragment>
   );
 };
 

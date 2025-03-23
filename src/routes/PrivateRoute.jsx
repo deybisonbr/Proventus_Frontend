@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // Estado para verificar se está autenticado
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token'); // Ou localStorage, dependendo de onde está salvando
+    const token = sessionStorage.getItem('token');
 
     if (!token) {
-      setIsAuthenticated(false); // Se não tiver token, o usuário não está autenticado
+      setIsAuthenticated(false); 
     } else {
 
       fetch(`${import.meta.env.VITE_API_URL}/auth/validate-token`, {
@@ -19,13 +19,13 @@ const PrivateRoute = ({ children }) => {
       })
         .then((response) => {
           if (response.ok) {
-            setIsAuthenticated(true); // Token é válido
+            setIsAuthenticated(true); 
           } else {
-            setIsAuthenticated(false); // Token inválido
+            setIsAuthenticated(false); 
           }
         })
         .catch(() => {
-          setIsAuthenticated(false); // Caso haja erro na requisição
+          setIsAuthenticated(false); 
         });
     }
   }, []);
@@ -35,7 +35,7 @@ const PrivateRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/" />; // Se não estiver autenticado, redireciona para a página de login
+    return <Navigate to="/" />; 
   }
 
   return children; // Se estiver autenticado, renderiza a rota
