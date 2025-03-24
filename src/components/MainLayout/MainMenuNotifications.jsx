@@ -1,105 +1,53 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Importando useState e useEffect
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // Usando React Router
-
 import MenuNotificationIcon from '../../assets/images/menu_notification_icon.svg';
 import NotificationIcon from '../../assets/images/notification_icon.svg';
 import ArrowContextUserMenuIcon from '../../assets/images/arrow_context_user_menu_icon.svg';
+import NotificationInfoIcon from '../../assets/images/notification/info_icon.svg';
 import Profile from '../../assets/images/profile.png';
 
-const MainMenuNotifications = ({ active_notification }) => {
-    const [menuOpen, setMenuOpen] = useState(false);
-    const [notificationOpen, setNotificationOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
-    const [hasUnread, setHasUnread] = useState(false);
-    const [userData, setUserData] = useState(null); // Novo estado para os dados do usuário
-    const navigate = useNavigate(); 
+const MainMenuNotifications = ({
+    active_notification,
+    menuOpen,
+    notificationOpen,
+    notifications,
+    hasUnread,
+    userData,
+    handleNotificationClick,
+    menuRef,
+    notificationRef,
+    setMenuOpen
+}) => {
+    const [selectedNotification, setSelectedNotification] = useState(null);
+    const popupRef = useRef(null); 
 
-    // Referências para o menu e notificações
-    const menuRef = useRef(null);
-    const notificationRef = useRef(null);
+    // Função que abre o popup com a notificação
+    const handleNotificationClickOpen = (notif) => {
+        setSelectedNotification(notif); 
+        handleNotificationClick(); 
+    };
 
-    // Fetch para notificações
-    const fetchNotifications = async () => {
-        try {
-          const token = sessionStorage.getItem('token'); // Substitua com a lógica para pegar seu token
+    // Fechar popup
+    const handleClosePopup = () => {
+        setSelectedNotification(null); 
+    };
 
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/notification/user`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`, 
-              'Content-Type': 'application/json',
-            }
-          });
-
-          if (!response.ok) {
-            throw new Error('Falha ao carregar as notificações');
-          }
-
-          const data = await response.json();
-          const sortedNotifications = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-          setNotifications(sortedNotifications.slice(0, 10));
-
-          const unreadNotifications = sortedNotifications.some((notif) => !notif.read);
-          setHasUnread(unreadNotifications);
-
-        } catch (error) {
-          console.error('Erro ao carregar notificações:', error);
+    // Fechar o popup ao clicar fora dele
+    const handleClickOutsidePopup = (event) => {
+       
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+            handleClosePopup();
         }
     };
 
-    // Fetch para os dados do usuário
-    const fetchUserData = async () => {
-        try {
-          const token = sessionStorage.getItem('token'); // Substitua com a lógica para pegar seu token
 
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/user`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            }
-          });
-
-          if (!response.ok) {
-            throw new Error('Falha ao carregar os dados do usuário');
-          }
-
-          const data = await response.json();
-          setUserData(data); // Atualiza os dados do usuário
-
-        } catch (error) {
-          console.error('Erro ao carregar os dados do usuário:', error);
-        }
-    };
-
-    // useEffect para ambos os fetches
     useEffect(() => {
-        fetchNotifications();
-        fetchUserData(); // Adiciona o fetch para carregar os dados do usuário
-
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setMenuOpen(false);
-            }
-            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-                setNotificationOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', handleClickOutsidePopup);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutsidePopup); 
         };
+
     }, []);
-
-    const handleNotificationClick = () => {
-        setNotificationOpen(!notificationOpen);
-    };
-
-    const handleNotificationLink = (url) => {
-        navigate(url); 
-    };
 
     return (
         <nav className="main_menu_notifications_content" style={{ position: 'relative' }}>
@@ -134,13 +82,47 @@ const MainMenuNotifications = ({ active_notification }) => {
                                 <ul>
                                     {notifications.map((notif) => (
                                         <li key={notif.id}>
-                                            <a className='notification_redirect_link' href="#" onClick={() => handleNotificationLink(notif.url)}>
-                                                <span className={`notification_user_read ${notif.read ? "true" : ""}`}></span><p> {notif.title}</p>
+                                            <a className='notification_redirect_link' href="#" onClick={() => handleNotificationClickOpen(notif)}>
+                                                <span className={`notification_user_read ${notif.read ? "true" : ""}`}></span>
+                                                <p>{notif.title}</p>
                                             </a>
                                         </li>
                                     ))}
                                 </ul>
                             )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <AnimatePresence>
+                    {selectedNotification && (
+                        <motion.div
+                            ref={popupRef} // Referência do popup
+                            className="notification_popup"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <div className="notification_popup_content">
+                                <div className="popup_header">
+                                    <div className="title_close_button_content">
+                                        <img src={NotificationInfoIcon} alt="" srcSet="" />
+
+                                        <div className="title_type_box">
+                                            <h3>{selectedNotification.title}</h3>
+                                            <p>{selectedNotification.type}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onClick={handleClosePopup} className="close_button">X</button>
+                                </div>
+
+
+
+                                <p className='description_notification'><strong>Descrição:</strong> {selectedNotification.description}</p>
+
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
